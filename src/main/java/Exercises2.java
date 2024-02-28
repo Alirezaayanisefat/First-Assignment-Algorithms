@@ -63,62 +63,26 @@ public class Exercises2 {
     */
 
     public static int romanToInt(String s) {
+        Map<Character, Integer> romanMap = new HashMap<>();
+        romanMap.put('I', 1);
+        romanMap.put('V', 5);
+        romanMap.put('X', 10);
+        romanMap.put('L', 50);
+        romanMap.put('C', 100);
+        romanMap.put('D', 500);
+        romanMap.put('M', 1000);
+
         int num = 0;
-        char ch;
-        for(int i = 0; i < s.length() ; i++)
-        {
-            ch = s.charAt(i);
-            switch(ch)
-            {
-                case 'I':
-                    if(s.charAt(i + 1) == 'V') {
-                        num += 4;
-                        i = i + 1;
-                    }
-                    else if(s.charAt(i + 1) == 'X') {
-                        num += 9;
-                        i = i + 1;
-                    }
-                    else
-                        num += 1;
-                    break;
-                case 'V':
-                    num += 5;
-                    break;
-                case 'X':
-                    if(s.charAt(i + 1) == 'L') {
-                        num += 40;
-                        i = i + 1;
-                    }
-                    else if(s.charAt(i + 1) == 'C') {
-                        num += 90;
-                        i = i + 1;
-                    }
-                    else
-                        num += 10;
-                    break;
-                case 'L':
-                    num += 50;
-                    break;
-                case 'C':
-                    if(s.charAt(i + 1) == 'D') {
-                        num += 400;
-                        i = i + 1;
-                    }
-                    else if(s.charAt(i + 1) =='M') {
-                        num += 900;
-                        i = i + 1;
-                    }
-                    else
-                        num += 100;
-                    break;
-                case 'D':
-                    num += 500;
-                    break;
-                case 'M':
-                    num += 1000;
-                    break;
+        int prevValue = 0;
+
+        for (int i = s.length() - 1; i >= 0; i--) {
+            int currValue = romanMap.get(s.charAt(i));
+            if (currValue < prevValue) {
+                num -= currValue;
+            } else {
+                num += currValue;
             }
+            prevValue = currValue;
         }
 
         return num;
@@ -130,9 +94,26 @@ public class Exercises2 {
     */
 
     public List<List<Integer>> permute(int[] nums) {
-    return null;
+        List<List<Integer>> permutations = new ArrayList<>();
+        f(nums, new ArrayList<>(), permutations);
+        return permutations;
+    }
+
+    private void f(int[] nums, List<Integer> currPermutation, List<List<Integer>> permutations) {
+        if (currPermutation.size() == nums.length) {
+            permutations.add(new ArrayList<>(currPermutation));
+            return;
+        }
+        for (int num : nums) {
+            if (!currPermutation.contains(num)) {
+                currPermutation.add(num);
+                f(nums, currPermutation, permutations);
+                currPermutation.remove(currPermutation.size() - 1);
+            }
+        }
     }
 
     public static void main(String[] args) {
+
     }
 }
